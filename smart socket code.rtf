@@ -1,0 +1,72 @@
+{\rtf1\ansi\ansicpg1252\cocoartf1671\cocoasubrtf400
+{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
+{\colortbl;\red255\green255\blue255;}
+{\*\expandedcolortbl;;}
+\paperw11900\paperh16840\margl1440\margr1440\vieww10800\viewh8400\viewkind0
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
+
+\f0\fs24 \cf0 // Pin 13 has an LED connected on most Arduino boards.\
+// give it a name:\
+int led = 13;\
+\
+int celsius = 0;\
+\
+int baselineTemp = 0;\
+\
+int fahrenheit = 0;\
+// the setup routine runs once when you press reset:\
+void setup() \{\
+  // initialize the digital pin as an output.\
+  pinMode(led, OUTPUT);\
+  pinMode(A0, INPUT);\
+  Serial.begin(9600);\
+\
+  pinMode(2, OUTPUT);\
+  pinMode(3, OUTPUT);\
+  pinMode(4, OUTPUT);\
+\}\
+\
+// the loop routine runs over and over again forever:\
+void loop() \{\
+  digitalWrite(led, HIGH);   // turn the LED on (HIGH is the voltage level)\
+  delay(1000);               // wait for a second\
+  digitalWrite(led, LOW);    // turn the LED off by making the voltage LOW\
+  delay(1000);  // wait for a second\
+\
+  // set thresshold temp to activate led\
+  baselineTemp = 40;\
+  // measure temp in cel\
+  celsius = map(((analogRead(A0) - 20) * 3.04), 0, 1023, -40, 125);\
+  // convert to fahrenheit\
+  fahrenheit = ((celsius * 9) / 5 + 32);\
+  Serial.print(celsius);\
+  Serial.print("C.");\
+  Serial.print(fahrenheit);\
+  Serial.println("F");\
+  if (celsius < baselineTemp) \{\
+    digitalWrite(2, LOW);\
+    digitalWrite(3, LOW);\
+    digitalWrite(4, LOW);\
+  \}\
+  if (celsius >= baselineTemp && celsius < baselineTemp + 10) \{\
+    digitalWrite(2, HIGH);\
+    digitalWrite(3, LOW);\
+    digitalWrite(4, LOW);\
+  \}\
+  if (celsius >= baselineTemp + 10 && celsius < baselineTemp + 20) \{\
+    digitalWrite(2, HIGH);\
+    digitalWrite(3, HIGH);\
+    digitalWrite(4, LOW);\
+  \}\
+  if (celsius >= baselineTemp + 20 && celsius < baselineTemp + 30) \{\
+    digitalWrite(2, HIGH);\
+    digitalWrite(3, HIGH);\
+    digitalWrite(4, HIGH);\
+  \}\
+  if (celsius >= baselineTemp + 30) \{\
+    digitalWrite(2, HIGH);\
+    digitalWrite(3, HIGH);\
+    digitalWrite(4, HIGH);\
+  \}\
+  delay(1000); // Wait for 1000 millisecond(s)\
+\}}
